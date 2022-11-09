@@ -1,0 +1,48 @@
+{
+    "name": "bitbouncer",
+    "version": "0.1.0",
+    "author": "Itallo Gabriel",
+    "module": "dist/px.esm.js",
+    "license": "MIT",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "lib"
+    ],
+    "engines": {
+        "node": ">=10"
+    },
+    "scripts": {
+        "start": "tsdx watch --entry lib/index.ts",
+        "build": "tsdx build --entry lib/index.ts",
+        "test": "tsdx test",
+        "coverage": "tsdx test --coverage --collectCoverageFrom ./lib/index.ts",
+        "prepare": "tsdx build --entry lib/index.ts",
+        "lint": "tsdx lint lib/**/*.ts",
+        "size": "size-limit --limit 1kb"
+    },
+    "devDependencies": {
+        "@size-limit/preset-small-lib": "^8.1.0",
+        "husky": "^8.0.2",
+        "size-limit": "^8.1.0",
+        "tsdx": "^0.14.1",
+        "tslib": "^2.4.1",
+        "typescript": "^4.8.4"
+    },
+    "size-limit": [
+        {
+            "path": "dist/bitbouncer.cjs.production.min.js",
+            "limit": "10 KB"
+        },
+        {
+            "path": "dist/bitbouncer.esm.js",
+            "limit": "10 KB"
+        }
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "tsdx lint lib/**/*.ts"
+        }
+    }
+}
