@@ -32,12 +32,11 @@ const bit = flags.create({
     MANAGE_WORKSPACE: true
 })
 
-bit.can(bit, 'CREATE_WORKSPACE') // => true
-bit.can(bit, 'INVITE_TO_WORKSPACE') // => false
+flags.can(bit, 'CREATE_WORKSPACE') // => true
+flags.can(bit, 'INVITE_TO_WORKSPACE') // => false
 
-const bitWithInviteToWorkspace = bit.allow(bit, 'INVITE_TO_WORKSPACE')
-
-const bitWithoutManageWorkspace = bit.deny(bit, 'MANAGE_WORKSPACE')
+const bitWithInviteToWorkspace = flags.allow(bit, 'INVITE_TO_WORKSPACE')
+const bitWithoutManageWorkspace = flags.deny(bit, 'MANAGE_WORKSPACE')
 ```
 
 ###### License
