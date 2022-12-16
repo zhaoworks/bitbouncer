@@ -1,52 +1,52 @@
-export type Permissions = Record<string | number, boolean>
+export type Flags = Record<string | number, boolean | number>
 
 /**
- * Creates a permission bouncer.
+ * Creates a flag bouncer.
  */
-function from<PermissionList extends Permissions>(permissions: PermissionList) {
-    const bouncer: Record<string, number> = Object.keys(permissions).reduce(
-        (set: Record<string, number>, permission: string, index: number) => {
-            set[permission] = 1 << index
+function from<FlagList extends Flags>(flags: FlagList) {
+    const bouncer: Record<string, number> = Object.keys(flags).reduce(
+        (set: Record<string, number>, flag: string, index: number) => {
+            set[flag] = 1 << index
             return set
         },
         {}
     )
 
     function from(bit: number) {
-        return Object.keys(bouncer).reduce((permissions: Permissions, permission: string) => {
-            if ((bit & bouncer[permission]) === bouncer[permission]) {
-                permissions[permission] = true
+        return Object.keys(bouncer).reduce((flags: Flags, flag: string) => {
+            if ((bit & bouncer[flag]) === bouncer[flag]) {
+                flags[flag] = true
             }
 
-            return permissions
+            return flags
         }, {})
     }
 
-    function create(permissionsSet: Partial<PermissionList>) {
+    function create(flagsSet: Partial<FlagList>) {
         let bit = 0
 
-        for (const permission of Object.keys(permissionsSet)) {
-            if (permissionsSet[permission] === true) {
-                bit |= bouncer[permission]
+        for (const flag of Object.keys(flagsSet)) {
+            if (flagsSet[flag] === true) {
+                bit |= bouncer[flag]
             }
         }
 
         return bit
     }
 
-    function can(bit: number, permission: keyof PermissionList) {
-        const permissionBit = bouncer[permission as string | number]
-        return (bit & permissionBit) === permissionBit
+    function can(bit: number, flag: keyof FlagList) {
+        const flagBit = bouncer[flag as string | number]
+        return (bit & flagBit) === flagBit
     }
 
-    function allow(bit: number, permission: keyof PermissionList) {
-        const permissionBit = bouncer[permission as string | number]
-        return bit | permissionBit
+    function allow(bit: number, flag: keyof FlagList) {
+        const flagBit = bouncer[flag as string | number]
+        return bit | flagBit
     }
 
-    function deny(bit: number, permission: keyof PermissionList) {
-        const permissionBit = bouncer[permission as string | number]
-        return bit & ~permissionBit
+    function deny(bit: number, flag: keyof FlagList) {
+        const flagBit = bouncer[flag as string | number]
+        return bit & ~flagBit
     }
 
     return { from, can, create, allow, deny }
